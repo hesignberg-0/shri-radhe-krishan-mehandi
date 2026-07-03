@@ -188,6 +188,18 @@
     });
   }
 
+  /* ── FAQ: one open at a time ── */
+  var faqItems = document.querySelectorAll(".faq-item");
+  faqItems.forEach(function (item) {
+    item.addEventListener("toggle", function () {
+      if (item.open) {
+        faqItems.forEach(function (other) {
+          if (other !== item) other.open = false;
+        });
+      }
+    });
+  });
+
   /* ── Footer year ── */
   document.getElementById("year").textContent = new Date().getFullYear();
 })();
