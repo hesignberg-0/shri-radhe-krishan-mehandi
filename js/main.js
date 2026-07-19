@@ -6,21 +6,25 @@
   var loader = document.getElementById("loader");
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  /* ── Loader: hand finishes drawing (~4.8s), then reveal site ── */
-  body.classList.add("locked");
-
+  /* ── Loader: hand finishes drawing (~4.8s), then reveal site.
+     Subpages have no loader — they reveal immediately. ── */
   function finishLoader() {
     if (body.classList.contains("loaded")) return;
-    loader.classList.add("done");
+    if (loader) loader.classList.add("done");
     body.classList.remove("locked");
     body.classList.add("loaded");
   }
 
-  var loaderTimer = setTimeout(finishLoader, reduceMotion ? 300 : 5300);
-  document.getElementById("loaderSkip").addEventListener("click", function () {
-    clearTimeout(loaderTimer);
-    finishLoader();
-  });
+  if (loader) {
+    body.classList.add("locked");
+    var loaderTimer = setTimeout(finishLoader, reduceMotion ? 300 : 5300);
+    document.getElementById("loaderSkip").addEventListener("click", function () {
+      clearTimeout(loaderTimer);
+      finishLoader();
+    });
+  } else {
+    body.classList.add("loaded");
+  }
 
   /* ── Nav: scrolled state + mobile menu ── */
   var nav = document.getElementById("nav");
@@ -146,9 +150,9 @@
   }
 
   /* ── Gentle parallax on hero mandala & motifs ── */
-  if (!reduceMotion) {
-    var mandala = document.querySelector(".hero-mandala");
-    var motifs = document.querySelector(".hero-motifs");
+  var mandala = document.querySelector(".hero-mandala");
+  var motifs = document.querySelector(".hero-motifs");
+  if (!reduceMotion && mandala && motifs) {
     window.addEventListener("scroll", function () {
       var y = window.scrollY;
       if (y < window.innerHeight) {
@@ -156,6 +160,63 @@
         motifs.style.transform = "translateY(" + y * 0.1 + "px)";
       }
     }, { passive: true });
+  }
+
+  /* ── Gallery filters + lightbox (gallery page) ── */
+  var filterBtns = document.querySelectorAll(".g-filter");
+  var galleryItems = document.querySelectorAll(".gx-item");
+  filterBtns.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      filterBtns.forEach(function (b) { b.classList.remove("active"); });
+      btn.classList.add("active");
+      var cat = btn.getAttribute("data-filter");
+      galleryItems.forEach(function (item) {
+        var show = cat === "all" || item.getAttribute("data-cat") === cat;
+        item.classList.toggle("hidden", !show);
+      });
+    });
+  });
+
+  var lightbox = document.getElementById("lightbox");
+  if (lightbox) {
+    var lbContent = lightbox.querySelector(".lb-content");
+    var openLightbox = function (item) {
+      lbContent.innerHTML = "";
+      var vid = item.querySelector("video");
+      if (vid) {
+        var v = document.createElement("video");
+        v.src = vid.querySelector("source").src;
+        v.controls = true; v.autoplay = true; v.playsInline = true;
+        lbContent.appendChild(v);
+      } else {
+        var img = item.querySelector("img");
+        var big = document.createElement("img");
+        big.src = img.src; big.alt = img.alt;
+        lbContent.appendChild(big);
+      }
+      var cap = item.getAttribute("data-label");
+      if (cap) {
+        var p = document.createElement("p");
+        p.textContent = cap;
+        lbContent.appendChild(p);
+      }
+      lightbox.classList.add("open");
+      body.classList.add("locked");
+    };
+    var closeLightbox = function () {
+      lightbox.classList.remove("open");
+      body.classList.remove("locked");
+      lbContent.innerHTML = "";
+    };
+    galleryItems.forEach(function (item) {
+      item.addEventListener("click", function () { openLightbox(item); });
+    });
+    lightbox.addEventListener("click", function (e) {
+      if (e.target === lightbox || e.target.classList.contains("lb-close")) closeLightbox();
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") closeLightbox();
+    });
   }
 
   /* ── Admission form → WhatsApp ── */
@@ -201,5 +262,6 @@
   });
 
   /* ── Footer year ── */
-  document.getElementById("year").textContent = new Date().getFullYear();
+  var yearEl = document.getElementById("year");
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
 })();
