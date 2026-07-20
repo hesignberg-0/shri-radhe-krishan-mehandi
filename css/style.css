@@ -296,7 +296,7 @@ body.loaded .hero-side-r{animation:side-in 1.2s 1.1s var(--ease-out) forwards, f
   display:inline-block;font-size:12px;letter-spacing:.4em;text-transform:uppercase;
   color:var(--gold);font-weight:500;margin-bottom:16px;
 }
-.kicker::before,.kicker::after{content:"—";color:var(--gold-soft);margin:0 12px}
+.kicker::before,.kicker::after{content:"✦";color:var(--gold-soft);margin:0 12px}
 .section-head h2, .training h2, .cta-banner h2{
   font-family:var(--font-display);font-weight:500;
   font-size:clamp(32px,4.6vw,56px);line-height:1.08;color:var(--ink);
@@ -611,7 +611,7 @@ body.loaded .hero-side-r{animation:side-in 1.2s 1.1s var(--ease-out) forwards, f
 .cta-banner p{font-weight:300;color:#dcc9ad;margin-bottom:34px}
 
 /* ═══════════════ CONTACT ═══════════════ */
-.contact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,2vw,24px)}
+.contact-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(14px,2vw,24px)}
 .c-card{
   background:var(--white);border:1.5px solid var(--cream-3);border-radius:20px;
   padding:30px 24px;display:block;
