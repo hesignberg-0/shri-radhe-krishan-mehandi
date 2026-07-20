@@ -1,7 +1,7 @@
 # Shri Radhe Krishan Mehandi Training Centre
 
-Animated single-page website for a bridal mehandi artist and training centre in Birgunj, Nepal —
-13+ years of artistry, 7,000+ students trained since 2011.
+"The Art Beyond Imagination" — animated multi-page website for a bridal mehandi artist and
+training centre in Birgunj, Nepal. 15+ years of artistry, 7,500+ students trained since 2011.
 
 **Live site:** https://hesignberg-0.github.io/shri-radhe-krishan-mehandi/
 
